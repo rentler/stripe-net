@@ -1,18 +1,32 @@
-shallow_clone: true
-image: Visual Studio 2017
 version: 1.0.{build}
+
+branches:
+  except:
+    - gh-pages
+
+skip_branch_with_pr: true
+
+image: Visual Studio 2017
+
+clone_depth: 3
+
 configuration: Release
+
 before_build:
   - cmd: cd src
   - cmd: nuget restore
   - cmd: cd ..
+
 build:
   project: src/Stripe.net.sln
   publish_nuget: true
+
 artifacts:
   - path: '**\*.nupkg'
+
 nuget:
   account_feed: true
+
 deploy:
   - provider: NuGet
     server: https://www.myget.org/F/rentler/api/v2/package
@@ -22,3 +36,4 @@ deploy:
     artifact: /.*\.nupkg/
     on:
       branch: master
+      appveyor_repo_tag: false
