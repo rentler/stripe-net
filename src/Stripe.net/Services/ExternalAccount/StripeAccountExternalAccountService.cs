@@ -19,5 +19,16 @@ namespace Stripe
                 )
             );
         }
+
+        //Async
+        public virtual async Task<StripeBankAccount> CreateAsync(string accountId, StripeAccountExternalAccountCreateOptions createOptions, StripeRequestOptions requestOptions = null)
+        {
+            return Mapper<StripeBankAccount>.MapFromJson(
+                await Requestor.PostStringAsync(
+                    this.ApplyAllParameters(createOptions, $"{Urls.BaseUrl}/accounts/{accountId}/external_accounts"),
+                    SetupRequestOptions(requestOptions)
+                )
+            );
+        }
     }
 }
